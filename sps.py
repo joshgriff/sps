@@ -1,5 +1,11 @@
-import numpy as np 
-import matplotlib.pyplot as plt
+try:
+	import numpy as np
+except:
+	print('Optional numpy not installed!')
+try:
+	import matplotlib.pyplot as plt
+except:
+	print('Optional matplotlib not installed!')
 import requests
 from json import JSONDecoder
 
