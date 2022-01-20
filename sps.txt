@@ -192,9 +192,6 @@ def best_plays(mq,pn='goatsie',rate_enemy_comp=False):
 				else:
 					team = gd['team2']
 
-
-
-
 			for m in team['monsters']:
 
 				if hh['winner'] == pn:
@@ -244,85 +241,6 @@ def best_plays(mq,pn='goatsie',rate_enemy_comp=False):
 			str(bb[m0][kmm]['w'])+' ; '+str(bb[m0][kmm]['l']))
 
 
-def ruleset_plays(mq,pn='goatsie',rate_enemy_comp=False):
-
-	# pn='goatsie'
-	h = get_history(pn)
-
-	jd = JSONDecoder()
-
-	gd_tbl = []
-
-	for hh in h:
-		
-		rules = hh['ruleset'].lower().split('|')
-
-		for rule in rules:
-
-			gd = jd.decode(hh['details'])
-
-			if 'type' not in gd.keys():
-
-				if gd['team1']['player'] == pn:
-					if rate_enemy_comp:
-						team = gd['team2']
-					else:
-						team = gd['team1']
-				else:
-					if rate_enemy_comp:
-						team = gd['team1']
-					else:
-						team = gd['team2']
-
-				for m in team['monsters']:
-
-					if hh['winner'] == pn:
-
-						gd_tbl.append([m['card_detail_id'],rule,1])
-
-					else:
-
-						gd_tbl.append([m['card_detail_id'],rule,0])
-
-
-	m0 = '100'
-	bb = {m0:{}}
-
-	for i in range(len(gd_tbl)):
-
-		mm = str(gd_tbl[i][1])
-		if mm not in bb.keys():
-			bb[mm] = {}
-			
-		mn = id_to_name(str(gd_tbl[i][0]))
-		if mn in bb[mm].keys():
-
-			bb[mm][mn]['w'] += gd_tbl[i][2]
-			bb[mm][mn]['l'] += 1-gd_tbl[i][2]
-		else:
-
-			bb[mm][mn] = {'w':gd_tbl[i][2],'l':1-gd_tbl[i][2]}
-
-		if mn in bb[m0].keys():
-			bb[m0][mn]['w'] += gd_tbl[i][2]
-			bb[m0][mn]['l'] += 1-gd_tbl[i][2]
-		else:
-			bb[m0][mn] = {'w':gd_tbl[i][2],'l':1-gd_tbl[i][2]}
-
-	print('Wins / Losses While Playing Monster at Mana Cap')
-	print(30*' '+'  rule   | total')
-	print(30*' '+'   w/l   | w/l')
-
-	# for km in bb.keys():
-	km = str(mq)
-	for kmm in bb[km].keys():
-		kmm2 = kmm+(30-len(kmm))*' '
-		# print(kmm2+' : '+str(bb[km][kmm]['w'])+' ; '+str(bb[km][kmm]['l'])+' ; '+str(bb[m0][kmm]['w'])+' ; '+str(bb[m0][kmm]['l']))
-		print(kmm2+' | '+
-			str(bb[km][kmm]['w'])+' ; '+str(bb[km][kmm]['l'])+' | '+
-			str(bb[m0][kmm]['w'])+' ; '+str(bb[m0][kmm]['l']))
-
-
 def runtime():
 
 	while 1:
@@ -330,25 +248,20 @@ def runtime():
 		print('Player Name')
 		pn = input()
 
-		# print('~\n~\nMana')
-		print('~\n~\nRuleset')
+		print('~\n~\nMana')
 		mq = input()
 
 		print('~\n~\n')
 
 		print('Plays against')
 
-		# best_plays(mq,pn,rate_enemy_comp=True)
-		ruleset_plays(mq,pn,rate_enemy_comp=True)
-
+		best_plays(mq,pn,rate_enemy_comp=True)
 
 		print('~\n~\n')		
 
 		print('Plays as')
 
-		# best_plays(mq,pn,rate_enemy_comp=False)
-		ruleset_plays(mq,pn,rate_enemy_comp=True)
-
+		best_plays(mq,pn,rate_enemy_comp=False)
 
 		print('~\n~\n')		
 
